@@ -1,0 +1,25 @@
+name: GitHub Self Hosted Runner
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Replace variables
+        run: UPDATED_AT=$(date) envsubst < html/index.html.template > html/index.html
+
+  deploy:
+    needs: build
+
+    runs-on: self-hosted
+    steps:
+      - name: Deploy
+        run: cp html/*.html /srv/html

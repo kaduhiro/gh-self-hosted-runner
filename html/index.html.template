@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Self Hosted Runner</title>
+</head>
+<body>
+    <dl>
+        <dt>Environment</dt>
+        <dd>${ENVIRONMENT}</dd>
+
+        <dt>Runner Version</dt>
+        <dd>${RUNNER_VERSION}</dd>
+
+        <dt>Runner Repository</dt>
+        <dd>
+            <a href="https://github.com/${RUNNER_REPOSITORY}">https://github.com/${RUNNER_REPOSITORY}</a>
+        </dd>
+
+        <dt>Runner Name</dt>
+        <dd>${RUNNER_NAME}</dd>
+
+        <dt>Last Update</dt>
+        <dd>${UPDATED_AT}</dd>
+    </dl>
+</body>
+</html>

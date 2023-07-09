@@ -1,0 +1,55 @@
+version: '3.8'
+
+x-var: &COMMON
+  networks:
+    internal:
+
+networks:
+  internal:
+    # name: internal
+    # external: true
+
+services:
+  nginx-proxy:
+    <<: *COMMON
+    image: nginxproxy/nginx-proxy:latest
+    container_name: nginx-proxy
+    hostname: nginx-proxy
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  nginx:
+    <<: *COMMON
+    image: nginx:latest
+    container_name: nginx
+    hostname: nginx
+    volumes:
+      - ../../html:/usr/share/nginx/html
+      - ./nginx/templates:/etc/nginx/templates
+    environment:
+      VIRTUAL_HOST: self-hosted.internal
+      VIRTUAL_PORT: 80
+      ALLOW_ORIGIN: http://self-hosted.internal
+  gh-self-hosted-runner:
+    <<: *COMMON
+    build: ../../build
+    image: gh-self-hosted-runner:1
+    container_name: gh-self-hosted-runner
+    hostname: gh-self-hosted-runner
+    restart: always
+    volumes:
+      - ../../html:/srv/html
+    environment:
+      ENVIRONMENT: $ENVIRONMENT
+      RUNNER_VERSION: $RUNNER_VERSION
+      RUNNER_REPOSITORY: $RUNNER_REPOSITORY
+      RUNNER_TOKEN: $RUNNER_TOKEN
+      RUNNER_NAME: ${RUNNER_NAME:-self-hosted}
+    command: >
+      sh -c "
+        if [ ! -e .credentials ]; then
+          ./config.sh --unattended --url https://github.com/$$RUNNER_REPOSITORY --token $$RUNNER_TOKEN --name $$RUNNER_NAME
+        fi
+        ./run.sh
+      "
