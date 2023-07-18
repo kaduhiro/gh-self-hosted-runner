@@ -1,3 +1,4 @@
+ARG TIMEZONE=Asia/Tokyo
 ARG OS_VERSION=22.04
 
 FROM ubuntu:$OS_VERSION
@@ -6,8 +7,11 @@ LABEL maintainer="kaduhiro <github@kaduhiro.com>"
 RUN apt-get update \
     && apt-get upgrade -y
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    tzdata ca-certificates curl tini make gettext
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata \
+    && ln -fns /usr/share/zoneinfo/$TIMEZONE /etc/localtime
+
+RUN apt-get install -y --no-install-recommends \
+    ca-certificates curl tini make gettext
 
 ARG RUNNER_PATH=/usr/local/actions-runner
 ARG RUNNER_VERSION=2.305.0
