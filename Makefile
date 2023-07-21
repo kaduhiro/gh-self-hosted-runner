@@ -11,7 +11,11 @@ DOCKER_COMPOSE := docker-compose -f deployments/$(ENVIRONMENT)/docker-compose.ym
 
 build: build/$(SERVICE)
 build/%: # build or rebuild a image
-	$(DOCKER_COMPOSE) build --build-arg RUNNER_VERSION=$(RUNNER_VERSION) $*
+	$(DOCKER_COMPOSE) build \
+		--build-arg RUNNER_OS=$(RUNNER_OS) \
+		--build-arg RUNNER_ARCH=$(RUNNER_ARCH) \
+		--build-arg RUNNER_VERSION=$(RUNNER_VERSION) \
+		$*
 
 run: run/$(SERVICE)
 run/%: # run a one-off command on a container

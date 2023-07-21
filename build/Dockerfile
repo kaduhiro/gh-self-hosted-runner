@@ -14,15 +14,17 @@ RUN apt-get install -y --no-install-recommends \
     ca-certificates curl tini make gettext
 
 ARG RUNNER_PATH=/usr/local/actions-runner
-ARG RUNNER_VERSION=2.305.0
+ARG RUNNER_OS
+ARG RUNNER_ARCH
+ARG RUNNER_VERSION
 
 RUN mkdir $RUNNER_PATH
 WORKDIR $RUNNER_PATH
 
-RUN curl -fsSLO https://github.com/actions/runner/releases/download/v$RUNNER_VERSION/actions-runner-linux-x64-$RUNNER_VERSION.tar.gz
-RUN tar xzf actions-runner-linux-x64-$RUNNER_VERSION.tar.gz \
+RUN curl -fsSLO https://github.com/actions/runner/releases/download/v$RUNNER_VERSION/actions-runner-$RUNNER_OS-$RUNNER_ARCH-$RUNNER_VERSION.tar.gz
+RUN tar xzf actions-runner-$RUNNER_OS-$RUNNER_ARCH-$RUNNER_VERSION.tar.gz \
     && ./bin/installdependencies.sh \
-    && rm -rf actions-runner-linux-x64-$RUNNER_VERSION.tar.gz
+    && rm -rf actions-runner-$RUNNER_OS-$RUNNER_ARCH-$RUNNER_VERSION.tar.gz
 
 ARG USERNAME=app
 ARG GROUPNAME=app
