@@ -15,6 +15,7 @@ build/%: # build or rebuild a image
 		--build-arg RUNNER_OS=$(RUNNER_OS) \
 		--build-arg RUNNER_ARCH=$(RUNNER_ARCH) \
 		--build-arg RUNNER_VERSION=$(RUNNER_VERSION) \
+		--build-arg UID=$(UID) \
 		$*
 
 run: run/$(SERVICE)
