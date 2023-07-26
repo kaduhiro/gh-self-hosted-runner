@@ -26,6 +26,14 @@ RUN tar xzf actions-runner-$RUNNER_OS-$RUNNER_ARCH-$RUNNER_VERSION.tar.gz \
     && ./bin/installdependencies.sh \
     && rm -rf actions-runner-$RUNNER_OS-$RUNNER_ARCH-$RUNNER_VERSION.tar.gz
 
+# Docker
+ARG DOCKER_GROUPNAME=docker
+ARG DOCKER_GID=999
+
+RUN groupadd -g $DOCKER_GID $DOCKER_GROUPNAME
+RUN apt-get install -y --no-install-recommends \
+      docker.io docker-compose
+
 ARG USERNAME=app
 ARG GROUPNAME=app
 ARG UID=1000
@@ -33,6 +41,8 @@ ARG GID=1000
 
 RUN groupadd -g $GID $GROUPNAME \
     && useradd -M -s /sbin/nologin -u $UID -g $GID $USERNAME
+
+RUN usermod -aG $DOCKER_GROUPNAME $USERNAME
 
 RUN chown -R $USERNAME.$GROUPNAME $RUNNER_PATH
 
