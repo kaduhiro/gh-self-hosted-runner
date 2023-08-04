@@ -39,6 +39,7 @@ services:
     hostname: gh-self-hosted-runner
     restart: always
     volumes:
+      - ${DOCKER_SOCKET}:/var/run/docker.sock
       - ../../html:/srv/html
     environment:
       ENVIRONMENT: $ENVIRONMENT
